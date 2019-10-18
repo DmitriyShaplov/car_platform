@@ -42,29 +42,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                    .antMatchers("/images/**", "/index.html", "/switch.css").permitAll()
-                    .antMatchers(HttpMethod.GET, "/items", "/car_parts").permitAll()
-                    .antMatchers("/registry", "/login").permitAll()
-                    .antMatchers("/additem.html").access("not hasRole('ADMIN') and authenticated")
-                    .anyRequest().authenticated()
+                .antMatchers("/images/**", "/index.html", "/switch.css", "/ws/*", "/ws", "/js/**", "/css/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/items").permitAll()
+                .antMatchers("/registry", "/login").permitAll()
+                .antMatchers("/additem.html").access("not hasRole('ADMIN') and authenticated")
+                .anyRequest().authenticated()
                 .and()
-                    .formLogin()
-                    .usernameParameter("login")
-                    .loginPage("/index.html")
-                    .loginProcessingUrl("/login")
-                    .successHandler(authenticationSuccessHandler())
-                    .failureHandler(authenticationFailureHandler())
+                .formLogin()
+                .usernameParameter("login")
+                .loginPage("/index.html")
+                .loginProcessingUrl("/login")
+                .successHandler(authenticationSuccessHandler())
+                .failureHandler(authenticationFailureHandler())
                 .and()
-                    .logout()
-                    .permitAll()
-                    .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
-                        httpServletResponse.setStatus(HttpStatus.OK.value());
-                        LOG.info("Logged out");
-                        httpServletResponse.getWriter().flush();
-                    })
-                    .invalidateHttpSession(true)
+                .logout()
+                .permitAll()
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                    httpServletResponse.setStatus(HttpStatus.OK.value());
+                    LOG.info("Logged out");
+                    httpServletResponse.getWriter().flush();
+                })
+                .invalidateHttpSession(true)
                 .and()
-                    .csrf().disable();
+                .csrf().disable();
     }
 
     @Override
